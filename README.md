@@ -1,5 +1,7 @@
 # How to use
 
+Run index.html
+
 1. Copy your Video Path (Ctrl + Shift + C)
 2. Paste in 'Paste Your Paths'
 3. Set your video Settings
