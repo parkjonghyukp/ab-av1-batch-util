@@ -5,7 +5,9 @@
 
 # How to use
 
-prepare ffmpeg & ab-av1 exe file
+prepare [ffmpeg](https://github.com/FFmpeg/FFmpeg) & [ab-av1](https://github.com/alexheretic/ab-av1) exe file
+
+(Optional) [Powershell](https://github.com/PowerShell/PowerShell)
 
 Run index.html
 
