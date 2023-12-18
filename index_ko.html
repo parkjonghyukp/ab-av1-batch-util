@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <title>Document</title>
+    <style>
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .ta_style {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <input
+        type="text"
+        id="rootPath"
+        class="mx-3 my-2 w-100 form-control"
+        placeholder="(선택사항) ab-av1 경로 (../ab-av1.exe 포함)"
+      />
+      <input
+        type="text"
+        id="ffmpegPath"
+        class="mx-3 my-2 w-100 form-control"
+        placeholder="(선택사항) ffmpeg 경로 (../ffmpeg.exe 포함)"
+      />
+      <div class="row">
+        <div class="col-6">
+          <textarea
+            id="namelist"
+            class="m-3 form-control"
+            style="width: 100%"
+            rows="8"
+            placeholder="비디오 경로 (Ctrl + Shift + C)"
+          ></textarea>
+        </div>
+        <div class="col-6">
+          <textarea
+            id="crfList"
+            class="m-3 form-control"
+            style="width: 100%"
+            rows="8"
+            placeholder="예측 CRF 값"
+          ></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6 ms-3 mb-3">
+          <div id="fileCount">개수 : 0</div>
+        </div>
+        <div class="col-auto mb-3" id="crfCount">개수 : 0</div>
+      </div>
+    </div>
+    <div class="container">
+      <fieldset class="mx-3 border p-2">
+        <legend class="w-auto ps-3">옵션</legend>
+        <div class="row">
+          <!-- <div class="col-auto ms-3 my-3">
+            <button id="exeBtn" class="btn btn-primary">Generate</button>
+          </div> -->
+          <div class="col-auto ms-2 my-3">
+            <select id="encode_mode" class="form-select">
+              <option selected value="crf-search">모드 선택</option>
+              <option value="crf-search">CRF 값 찾기</option>
+              <option value="auto-encode">자동 인코딩</option>
+              <option value="sample-encode">샘플 인코딩</option>
+              <option value="encode">인코딩</option>
+              <option value="fix">오디오만 변경</option>
+            </select>
+          </div>
+          <div class="col-auto ms-2 my-3">
+            <select id="encoder" class="form-select">
+              <option selected value="svt-av1">인코더 선택</option>
+              <option value="libx264">H.264</option>
+              <option value="libx265">H.265</option>
+              <option value="hevc_nvenc">NVENC (HEVC)</option>
+              <option value="svt-av1">SVT-AV1</option>
+            </select>
+          </div>
+          <div class="col-auto ms-2 my-3">
+            <input
+              type="text"
+              id="preset_val"
+              class="form-control"
+              style="width: 9rem"
+              placeholder="프리셋 값 입력"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-auto ms-3 my-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="flexCheckChecked"
+                checked
+              />
+              <label class="form-check-label" for="flexCheckChecked">
+                인코딩 후 오디오를 Opus (2ch, 96kbps)로 바꾸기
+              </label>
+            </div>
+          </div>
+          <div class="col-auto ms-2 my-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="isAbsolutePath"
+              />
+              <label class="form-check-label" for="isAbsolutePath">
+                절대경로 사용
+              </label>
+            </div>
+          </div>
+          <div class="col-auto ms-2 my-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="isShutdown" />
+              <label class="form-check-label" for="isShutdown">
+                cmd 명령문 완료 후 컴퓨터 종료
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="container">
+      <div class="form-floating m-3">
+        <input
+          type="text"
+          id="asdf"
+          class="form-control ta_style"
+          style="height: 8vh; width: 100%"
+        />
+        <label for="asdf">결과</label>
+      </div>
+    </div>
+    <div class="container">
+      <button id="copyBtn" class="btn btn-primary mx-3">복사하기</button>
+    </div>
+  </body>
+  <script>
+    const rootPath = document.getElementById("rootPath");
+    const isShutdown = document.getElementById("isShutdown");
+    const ffmpegPath = document.getElementById("ffmpegPath");
+    const flexCheckChecked = document.getElementById("flexCheckChecked");
+    const isAbsolutePath = document.getElementById("isAbsolutePath");
+    const preset_val = document.getElementById("preset_val");
+    const encode_mode = document.getElementById("encode_mode");
+    const namelist = document.getElementById("namelist");
+    const asdf = document.getElementById("asdf");
+    const copyBtn = document.getElementById("copyBtn");
+    // const exeBtn = document.getElementById("exeBtn");
+    const encoder = document.getElementById("encoder");
+    const crfList = document.getElementById("crfList");
+    const fileCount = document.getElementById("fileCount");
+    const crfCount = document.getElementById("crfCount");
+    rootPath.value = localStorage.getItem("abav1");
+    ffmpegPath.value = localStorage.getItem("ffmpeg");
+    flexCheckChecked.value = localStorage.getItem("checker");
+
+    var list = [];
+    var crfListValue = [];
+    var root = "";
+    var ffmpegRoot = "";
+    var encodeSuffix = "";
+
+    namelist.addEventListener("blur", () => {
+      if (namelist.value === "") {
+        fileCount.innerHTML = "개수 : 0";
+        return;
+      }
+      fileCount.innerHTML = "개수 : " + namelist.value.split("\n").length;
+    });
+    crfList.addEventListener("blur", () => {
+      if (crfList.value === "") {
+        crfCount.innerHTML = "개수 : 0";
+        return;
+      }
+      crfCount.innerHTML = "개수 : " + crfList.value.split("\n").length;
+    });
+
+    ////////
+
+    namelist.addEventListener("change", () => init());
+    crfList.addEventListener("change", () => init());
+    rootPath.addEventListener("change", () => init());
+    ffmpegPath.addEventListener("change", () => init());
+    encode_mode.addEventListener("change", () => init());
+    preset_val.addEventListener("change", () => init());
+    isShutdown.addEventListener("change", () => init());
+    encoder.addEventListener("change", () => init());
+    flexCheckChecked.addEventListener("change", () => {
+      init();
+      localStorage.setItem("checker", flexCheckChecked.checked);
+    });
+    isAbsolutePath.addEventListener("change", () => {
+      init();
+      localStorage.setItem("absolutePath", isAbsolutePath.checked);
+    });
+
+    // exeBtn.addEventListener("click", () => init());
+
+    copyBtn.addEventListener("click", () => {
+      asdf.select();
+      document.execCommand("copy");
+    });
+
+    function init() {
+      if (encoder.value === "svt-av1") encodeSuffix = "av1";
+      else if (encoder.value === "libx264") encodeSuffix = "x264";
+      else if (encoder.value === "libx265") encodeSuffix = "x265";
+      else encodeSuffix = encoder.value;
+
+      if (rootPath.value[rootPath.value.length - 1] === '"') {
+        root = rootPath.value.slice(1, -1);
+        localStorage.setItem("abav1", root);
+      } else {
+        root = rootPath.value;
+        localStorage.setItem("abav1", root);
+      }
+
+      if (ffmpegPath.value[ffmpegPath.value.length - 1] === '"') {
+        ffmpegRoot = ffmpegPath.value.slice(1, -1);
+        localStorage.setItem("ffmpeg", ffmpegRoot);
+      } else {
+        ffmpegRoot = ffmpegPath.value;
+        localStorage.setItem("ffmpeg", ffmpegRoot);
+      }
+
+      asdf.value = "";
+      list = namelist.value.split("\n");
+      crfListValue = crfList.value.split("\n");
+      if (isAbsolutePath.checked) {
+        for (var i = 0; i < list.length; i++) {
+          if (list[i][list[i].length - 1] == '"')
+            list[i] = list[i].slice(1, -1);
+        }
+      } else {
+        for (var i = 0; i < list.length; i++) {
+          var tempList = list[i].split("\\");
+          list[i] = tempList[tempList.length - 1];
+          if (list[i][list[i].length - 1] == '"')
+            list[i] = list[i].slice(0, -1);
+        }
+      }
+      if (encode_mode.value !== "fix") {
+        for (var i = 0; i < list.length; i++) {
+          if (rootPath.value === "") {
+            asdf.value += `ab-av1 `;
+          } else {
+            asdf.value += `"${root}" `;
+          }
+
+          if (crfList.value !== "") {
+            if (crfListValue[i] !== undefined)
+              crfListValue.push(crfListValue[0]);
+            if (crfListValue.length === 1) {
+              if (i === list.length - 1) {
+                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[0]} --preset ${preset_val.value}`;
+              } else {
+                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[0]} --preset ${preset_val.value} && `;
+              }
+              console.log(crfList.value);
+            } else {
+              if (i === list.length - 1) {
+                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[i]} --preset ${preset_val.value}`;
+              } else {
+                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[i]} --preset ${preset_val.value} && `;
+              }
+              console.log(crfList.value);
+            }
+          } else {
+            if (i === list.length - 1) {
+              asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --preset ${preset_val.value}`;
+            } else {
+              asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --preset ${preset_val.value} && `;
+            }
+          }
+        }
+      }
+      if (
+        flexCheckChecked.checked &&
+        (encode_mode.value === "auto-encode" ||
+          encode_mode.value === "encode" ||
+          encode_mode.value === "fix")
+      ) {
+        if (
+          encode_mode.value === "auto-encode" ||
+          encode_mode.value === "encode"
+        ) {
+          asdf.value += ` && `;
+          for (var i = 0; i < list.length; i++) {
+            if (ffmpegPath.value === "") {
+              asdf.value += `ffmpeg `;
+            } else {
+              asdf.value += `"${ffmpegRoot}" `;
+            }
+            if (i === list.length - 1) {
+              asdf.value += `-i "${list[i].slice(
+                0,
+                -4
+              )}.${encodeSuffix}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[
+                i
+              ].slice(0, -4)}_opus.mp4" && `;
+              asdf.value += `del "${list[i].slice(0, -4)}.${encodeSuffix}.mp4"`;
+            } else {
+              asdf.value += `-i "${list[i].slice(
+                0,
+                -4
+              )}.${encodeSuffix}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[
+                i
+              ].slice(0, -4)}_opus.mp4" && `;
+              asdf.value += `del "${list[i].slice(
+                0,
+                -4
+              )}.${encodeSuffix}.mp4" && `;
+            }
+          }
+        } else {
+          for (var i = 0; i < list.length; i++) {
+            if (ffmpegPath.value === "") {
+              asdf.value += `ffmpeg `;
+            } else {
+              asdf.value += `"${ffmpegRoot}" `;
+            }
+            if (i === list.length - 1) {
+              asdf.value += `-i "${list[i].slice(
+                0,
+                -4
+              )}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[i].slice(
+                0,
+                -4
+              )}_opus.mp4" && `;
+              asdf.value += `del "${list[i].slice(0, -4)}.mp4"`;
+            } else {
+              asdf.value += `-i "${list[i].slice(
+                0,
+                -4
+              )}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[i].slice(
+                0,
+                -4
+              )}_opus.mp4" && `;
+              asdf.value += `del "${list[i].slice(0, -4)}.mp4" && `;
+            }
+          }
+        }
+      }
+      if (isShutdown.checked) {
+        asdf.value += ` && shutdown -s -f -t -30`;
+      }
+    }
+  </script>
+</html>
