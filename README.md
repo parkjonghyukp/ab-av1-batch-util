@@ -2,12 +2,13 @@
 #### batch generator using ffmpeg & ab-av1
 ![image](https://github.com/parkjonghyukp/ab-av1-encoding-util/assets/149362146/6642eb25-491d-40b1-ac73-92e677a9f4a2)
 
+# Requirement
+
+* [ffmpeg](https://github.com/FFmpeg/FFmpeg)
+* [ab-av1](https://github.com/alexheretic/ab-av1)
+* (Optional) [Powershell](https://github.com/PowerShell/PowerShell)
 
 # How to use
-
-prepare [ffmpeg](https://github.com/FFmpeg/FFmpeg) & [ab-av1](https://github.com/alexheretic/ab-av1) exe file
-
-(Optional) [Powershell](https://github.com/PowerShell/PowerShell)
 
 Run index.html
 
