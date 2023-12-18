@@ -16,6 +16,8 @@
 
 # How to use
 
+### English
+
 Run index.html
 
 0. Add environment variable Paths of ffmpeg / ab-av1, or paste the paths in '(optional)' inputs
@@ -25,7 +27,7 @@ Run index.html
 
 Note : if the result is larger than 5Kb, use [Powershell](https://github.com/PowerShell/PowerShell) latest version
 
-# 사용법
+### 한국어
 
 index_ko.html 실행
 
