@@ -1,3 +1,8 @@
+# ab-av1-encoding-util
+######batch generator using ffmpeg & ab-av1
+![image](https://github.com/parkjonghyukp/ab-av1-encoding-util/assets/149362146/6642eb25-491d-40b1-ac73-92e677a9f4a2)
+
+
 # How to use
 
 prepare ffmpeg & ab-av1 exe file
