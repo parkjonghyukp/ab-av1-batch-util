@@ -20,7 +20,7 @@ Run index.html
 <img src="https://github.com/parkjonghyukp/park/assets/149362146/c7b62a24-bf08-49b0-b983-2aa593a52b90" alt="image01"/>
 
 
-#### result query of above image might be
+#### result of above image might be
 ```cmd
 ab-av1 auto-encode -e svt-av1 -i "2023-12-17 17-01-31.mp4" --preset 5 && ab-av1 auto-encode -e svt-av1 -i "2023-12-17 17-01-33.mp4" --preset 5 && ffmpeg -i "2023-12-17 17-01-31.av1.mp4" -c:v copy -c:a libopus -b:a 96K "2023-12-17 17-01-31_opus.mp4" && del "2023-12-17 17-01-31.av1.mp4" && ffmpeg -i "2023-12-17 17-01-33.av1.mp4" -c:v copy -c:a libopus -b:a 96K "2023-12-17 17-01-33_opus.mp4" && del "2023-12-17 17-01-33.av1.mp4" && shutdown -s -f -t -30
 ```
@@ -28,7 +28,7 @@ ab-av1 auto-encode -e svt-av1 -i "2023-12-17 17-01-31.mp4" --preset 5 && ab-av1 
 ![image](https://github.com/parkjonghyukp/ab-av1-encoding-util/assets/149362146/ed6bc04d-8af2-49a2-bc7f-45da38c1aac1)
 
 
-#### result query of above image might be
+#### result of above image might be
 ```cmd
 ab-av1 encode -e hevc_nvenc -i "C:\Users\User\Videos\2023-12-17 17-01-31.mp4" --crf 34 --preset 5 && ab-av1 encode -e hevc_nvenc -i "C:\Users\User\2023-12-17 17-01-33.mp4" --crf 34 --preset 5 && ffmpeg -i "C:\Users\User\Videos\2023-12-17 17-01-31.hevc_nvenc.mp4" -c:v copy -c:a libopus -b:a 96K "C:\Users\User\Videos\2023-12-17 17-01-31_opus.mp4" && del "C:\Users\User\Videos\2023-12-17 17-01-31.hevc_nvenc.mp4" && ffmpeg -i "C:\Users\User\2023-12-17 17-01-33.hevc_nvenc.mp4" -c:v copy -c:a libopus -b:a 96K "C:\Users\User\2023-12-17 17-01-33_opus.mp4" && del "C:\Users\User\2023-12-17 17-01-33.hevc_nvenc.mp4" && shutdown -s -f -t -30
 ```
