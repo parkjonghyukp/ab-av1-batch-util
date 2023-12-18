@@ -16,6 +16,8 @@ Run index.html
 3. Set your Option
 4. Copy the result and Run in CMD
 
+Note : if the result is larger than 5Kb, use Powershell latest version
+
 # Examples
 <img src="https://github.com/parkjonghyukp/park/assets/149362146/c7b62a24-bf08-49b0-b983-2aa593a52b90" alt="image01"/>
 
