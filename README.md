@@ -1,7 +1,11 @@
 # How to use
 
+prepare ffmpeg & ab-av1 exe file
+
 Run index.html
 
+0. Add environment variable Paths of ffmpeg / ab-av1
+  Or paste the paths in '(optional)' inputs
 1. Copy your Video Path in File Explorer (Ctrl + Shift + C)
 2. Paste in 'Paste Your Paths'
 3. Set your video Settings
