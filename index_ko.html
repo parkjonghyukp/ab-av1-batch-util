@@ -184,17 +184,17 @@
 
     namelist.addEventListener("blur", () => {
       if (namelist.value === "") {
-        fileCount.innerHTML = "개수 : 0";
+        fileCount.innerHTML = "amount : 0";
         return;
       }
-      fileCount.innerHTML = "개수 : " + namelist.value.split("\n").length;
+      fileCount.innerHTML = "amount : " + namelist.value.split("\n").length;
     });
     crfList.addEventListener("blur", () => {
       if (crfList.value === "") {
-        crfCount.innerHTML = "개수 : 0";
+        crfCount.innerHTML = "amount : 0";
         return;
       }
-      crfCount.innerHTML = "개수 : " + crfList.value.split("\n").length;
+      crfCount.innerHTML = "amount : " + crfList.value.split("\n").length;
     });
 
     ////////
@@ -276,14 +276,14 @@
               if (i === list.length - 1) {
                 asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[0]} --preset ${preset_val.value}`;
               } else {
-                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[0]} --preset ${preset_val.value} && `;
+                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[0]} --preset ${preset_val.value} ; `;
               }
               console.log(crfList.value);
             } else {
               if (i === list.length - 1) {
                 asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[i]} --preset ${preset_val.value}`;
               } else {
-                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[i]} --preset ${preset_val.value} && `;
+                asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --crf ${crfListValue[i]} --preset ${preset_val.value} ; `;
               }
               console.log(crfList.value);
             }
@@ -291,7 +291,7 @@
             if (i === list.length - 1) {
               asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --preset ${preset_val.value}`;
             } else {
-              asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --preset ${preset_val.value} && `;
+              asdf.value += `${encode_mode.value} -e ${encoder.value} -i "${list[i]}" --preset ${preset_val.value} ; `;
             }
           }
         }
@@ -306,7 +306,7 @@
           encode_mode.value === "auto-encode" ||
           encode_mode.value === "encode"
         ) {
-          asdf.value += ` && `;
+          asdf.value += ` ; `;
           for (var i = 0; i < list.length; i++) {
             if (ffmpegPath.value === "") {
               asdf.value += `ffmpeg `;
@@ -319,7 +319,7 @@
                 -4
               )}.${encodeSuffix}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[
                 i
-              ].slice(0, -4)}_opus.mp4" && `;
+              ].slice(0, -4)}_opus.mp4" ; `;
               asdf.value += `del "${list[i].slice(0, -4)}.${encodeSuffix}.mp4"`;
             } else {
               asdf.value += `-i "${list[i].slice(
@@ -327,11 +327,11 @@
                 -4
               )}.${encodeSuffix}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[
                 i
-              ].slice(0, -4)}_opus.mp4" && `;
+              ].slice(0, -4)}_opus.mp4" ; `;
               asdf.value += `del "${list[i].slice(
                 0,
                 -4
-              )}.${encodeSuffix}.mp4" && `;
+              )}.${encodeSuffix}.mp4" ; `;
             }
           }
         } else {
@@ -348,7 +348,7 @@
               )}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[i].slice(
                 0,
                 -4
-              )}_opus.mp4" && `;
+              )}_opus.mp4" ; `;
               asdf.value += `del "${list[i].slice(0, -4)}.mp4"`;
             } else {
               asdf.value += `-i "${list[i].slice(
@@ -357,14 +357,14 @@
               )}.mp4" -c:v copy -c:a libopus -b:a 96K "${list[i].slice(
                 0,
                 -4
-              )}_opus.mp4" && `;
-              asdf.value += `del "${list[i].slice(0, -4)}.mp4" && `;
+              )}_opus.mp4" ; `;
+              asdf.value += `del "${list[i].slice(0, -4)}.mp4" ; `;
             }
           }
         }
       }
       if (isShutdown.checked) {
-        asdf.value += ` && shutdown -s -f -t -30`;
+        asdf.value += ` ; shutdown -s -f -t -30`;
       }
     }
   </script>
